@@ -1,47 +1,76 @@
-# EncodeX  - CLI Crypto Tool 🔐
+# EncodeX — CLI Crypto Tool 🔐
 
-A lightweight, command-line interface (CLI) cryptography tool built with Python. This tool allows users to generate secure encryption keys, encrypt sensitive plaintext messages, and decrypt them back to their original form using the robust Fernet (symmetric encryption) algorithm.
+![Python](https://img.shields.io/badge/Python-3.x-blue?logo=python)
+![Status](https://img.shields.io/badge/Status-Active-brightgreen)
+
+A lightweight command-line cryptography tool built with Python. EncodeX lets you generate secure encryption keys, encrypt sensitive messages, and decrypt them using the **Fernet** symmetric encryption algorithm.
+
+---
 
 ## 🚀 Features
 
-* **Key Generation:** Generates a cryptographically secure, URL-safe base64-encoded key.
-* **Message Encryption:** Encrypts standard text into unreadable ciphertext.
-* **Message Decryption:** Reverts ciphertext back to readable plaintext using the correct secret key.
-* **Interactive CLI:** Easy-to-use menu-driven interface.
+| Feature | Description |
+|---|---|
+| 🔑 Key Generation | Generates a cryptographically secure, URL-safe base64-encoded key |
+| 🔒 Encryption | Converts plaintext into unreadable ciphertext |
+| 🔓 Decryption | Reverts ciphertext back to readable plaintext using the correct key |
+| 🖥️ Interactive CLI | Easy-to-use menu-driven interface |
+
+---
 
 ## 📋 Requirements
 
-* Python 3.x
-* `cryptography` library
+- Python 3.x
+- `cryptography` library
+
+---
 
 ## ⚙️ Installation
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/DevVettel/EncodeX(https://github.com/DevVettel/EncodeX.git)
-   cd EncodeX
+**1. Clone the repository:**
+```bash
+git clone https://github.com/DevVettel/EncodeX.git
+cd EncodeX
+```
 
-
-
-Install the required dependencies:
-
+**2. Install dependencies:**
 ```bash
 pip install cryptography
+```
 
+---
 
+## 💻 Usage
 
-💻 Usage
-Run the main script to start the interactive tool:
-
+Run the main script to launch the interactive tool:
 ```bash
 python crypto_tool.py
+```
 
+Follow the on-screen menu to:
+- Generate a new encryption key
+- Encrypt a message
+- Decrypt a message
 
+---
 
+## 📁 Project Structure
+```
+EncodeX/
+├── crypto_tool.py   # Main CLI application
+└── secret.key       # Generated encryption key (auto-created)
+```
 
-⚠️ Security Disclaimer
-This tool is created for educational purposes to demonstrate the basics of symmetric cryptography. Keep your secret.key file secure. If you lose the key, you will not be able to decrypt your messages. Anyone with access to your secret.key can decrypt your messages.
+---
 
+## ⚠️ Security Disclaimer
 
+> This tool is intended for **educational purposes** to demonstrate the basics of symmetric cryptography.
 
+- 🔐 Keep your `secret.key` file **secure and private**
+- ❌ If you lose the key, your encrypted messages **cannot be recovered**
+- 👁️ Anyone with access to `secret.key` can decrypt your messages
 
+---
+
+<p align="center">Made with 🖤 by <a href="https://github.com/DevVettel">DevVettel</a></p>
