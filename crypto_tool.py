@@ -1,95 +1,103 @@
-from cryptography.fernet import Fernet
-import os
+import getpass
 
-def generate_key():
-    key = Fernet.generate_key()
-    with open("secret.key", "wb") as key_file:
-        key_file.write(key)
-    print("\n[+] Success: New key generated and saved as 'secret.key'")
+from cryptography.fernet import InvalidToken
+from core import generate_key, load_key, save_key_with_password, load_key_with_password
+from encryptor import encrypt_message
+from decryptor import decrypt_message
 
-def load_key():
-    if not os.path.exists("secret.key"):
-        print("\n[!] Error: 'secret.key' not found. Please generate a key first.")
-        return None
-    with open("secret.key", "rb") as key_file:
-        return key_file.read()
 
-def encrypt_text():
+def encrypt_text() -> None:
     key = load_key()
-    if key is None: return
-
-    f = Fernet(key)
+    if key is None:
+        return
     message = input("\n[>] Enter the text to encrypt: ")
-    encrypted_message = f.encrypt(message.encode())
-    
+    encrypted = encrypt_message(message, key)
     print("\n--- ENCRYPTION RESULT ---")
-    print(f"Encrypted Text: {encrypted_message.decode()}")
+    print(f"Encrypted Text: {encrypted.decode()}")
     print("-------------------------")
 
-def decrypt_text():
-    key = load_key()
-    if key is None: return
 
-    f = Fernet(key)
-    encrypted_message = input("\n[>] Enter the encrypted text to decrypt: ").encode()
-    
+def decrypt_text() -> None:
+    key = load_key()
+    if key is None:
+        return
+    encrypted_input = input("\n[>] Enter the encrypted text to decrypt: ").encode()
     try:
-        decrypted_message = f.decrypt(encrypted_message).decode()
+        decrypted = decrypt_message(encrypted_input, key)
         print("\n--- DECRYPTION RESULT ---")
-        print(f"Decrypted Text: {decrypted_message}")
+        print(f"Decrypted Text: {decrypted}")
         print("-------------------------")
-    except Exception as e:
+    except InvalidToken:
         print("\n[!] Error: Invalid key or corrupted encrypted text.")
 
-def display_menu():
-    print("\n" )
+
+def generate_key_from_password() -> None:
+    password = getpass.getpass("\n[>] Enter password (hidden): ")
+    confirm = getpass.getpass("[>] Confirm password (hidden): ")
+    if password != confirm:
+        print("\n[!] Error: Passwords do not match.")
+        return
+    save_key_with_password(password)
+
+
+def encrypt_text_with_password() -> None:
+    password = getpass.getpass("\n[>] Enter password (hidden): ")
+    key = load_key_with_password(password)
+    if key is None:
+        return
+    message = input("[>] Enter the text to encrypt: ")
+    try:
+        encrypted = encrypt_message(message, key)
+        print("\n--- ENCRYPTION RESULT ---")
+        print(f"Encrypted Text: {encrypted.decode()}")
+        print("-------------------------")
+    except Exception:
+        print("\n[!] Error: Wrong password or corrupted key file.")
+
+
+def decrypt_text_with_password() -> None:
+    password = getpass.getpass("\n[>] Enter password (hidden): ")
+    key = load_key_with_password(password)
+    if key is None:
+        return
+    encrypted_input = input("[>] Enter the encrypted text to decrypt: ").encode()
+    try:
+        decrypted = decrypt_message(encrypted_input, key)
+        print("\n--- DECRYPTION RESULT ---")
+        print(f"Decrypted Text: {decrypted}")
+        print("-------------------------")
+    except InvalidToken:
+        print("\n[!] Error: Wrong password or corrupted encrypted text.")
+
+
+def display_menu() -> None:
     print("""
-          
+          ____            __     __   _   _       _
+         |  _ \  _____   _\ \   / /__| |_| |_ ___| |
+         | | | |/ _ \ \ / /\ \ / / _ \ __| __/ _ \ |
+         | |_| |  __/\ V /  \ V /  __/ |_| ||  __/ |
+         |____/ \___| \_/    \_/ \___|\__|\__\___|_|
+    """)
+    print("=" * 42)
+    print("   EncodeX by DevVettel - CLI TOOL")
+    print("=" * 42)
+    print("  -- Random Key Mode --")
+    print("  1. Generate New Key")
+    print("  2. Encrypt a Message")
+    print("  3. Decrypt a Message")
+    print("  -- Password Key Mode --")
+    print("  4. Generate Key from Password")
+    print("  5. Encrypt with Password")
+    print("  6. Decrypt with Password")
+    print("  7. Exit")
+    print("=" * 42)
 
 
-              ____            __     __   _   _       _ 
-             |  _ \  _____   _\ \   / /__| |_| |_ ___| |
-             | | | |/ _ \ \ / /\ \ / / _ \ __| __/ _ \ |
-             | |_| |  __/\ V /  \ V /  __/ |_| ||  __/ |
-             |____/ \___| \_/    \_/ \___|\__|\__\___|_|
-           
-          
-
-
-
-
-          
-          
-          
-          
-          
-          
-          
-          
-          """)
-    print("\n" + "="*30)
-    print("   EncodeX by DevVettel - CLI TOOL   ")
-    print("="*30)
-    print("1. Generate New Key")
-    print("2. Encrypt a Message")
-    print("3. Decrypt a Message")
-    print("4. Exit")
-    print("="*30)
-    print("""    
-
-
-
-
-
-
-""")
-
-# --- Main Application Loop ---
 if __name__ == "__main__":
     while True:
         display_menu()
-        choice = input("[?] Select an option (1-4): ")
-        
+        choice = input("[?] Select an option (1-7): ")
+
         if choice == '1':
             generate_key()
         elif choice == '2':
@@ -97,6 +105,12 @@ if __name__ == "__main__":
         elif choice == '3':
             decrypt_text()
         elif choice == '4':
+            generate_key_from_password()
+        elif choice == '5':
+            encrypt_text_with_password()
+        elif choice == '6':
+            decrypt_text_with_password()
+        elif choice == '7':
             print("\nExiting the tool.\n")
             break
         else:
