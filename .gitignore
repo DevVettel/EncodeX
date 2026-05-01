@@ -1,3 +1,10 @@
 secret.key
 kripto_env/
 __pycache__/
+.claude/
+*.local.json
+.pytest_cache/
+.mypy_cache/
+dist/
+build/
+*.egg-info/
