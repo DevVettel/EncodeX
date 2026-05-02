@@ -24,7 +24,8 @@ class TestCore(unittest.TestCase):
 
     def test_generate_key_produces_valid_fernet_key(self):
         core.generate_key()
-        key = open(core.KEY_FILE, "rb").read()
+        with open(core.KEY_FILE, "rb") as f:
+            key = f.read()
         Fernet(key)  # raises ValueError if key is invalid
 
     def test_load_key_returns_bytes(self):
@@ -33,7 +34,8 @@ class TestCore(unittest.TestCase):
 
     def test_load_key_matches_saved_key(self):
         core.generate_key()
-        raw = open(core.KEY_FILE, "rb").read()
+        with open(core.KEY_FILE, "rb") as f:
+            raw = f.read()
         self.assertEqual(core.load_key(), raw)
 
     def test_load_key_missing_file_returns_none(self):
